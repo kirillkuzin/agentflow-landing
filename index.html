@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AgentFlow — Готовые AI-агенты для вашего бизнеса</title>
+  <meta name="description" content="Готовые AI-агенты: отвечают клиентам, читают почту, делают покупки и выполняют рутину за вас. Подключите за 24 часа." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #080b12;
+      --surface: #0f1520;
+      --surface2: #161d2e;
+      --border: rgba(255,255,255,0.07);
+      --accent: #4f6ef7;
+      --accent2: #8b5cf6;
+      --accent3: #06d6a0;
+      --text: #f0f4ff;
+      --muted: #8899bb;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    /* NAV */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 16px 40px;
+      background: rgba(8,11,18,0.85);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border);
+    }
+    .logo { font-size: 1.25rem; font-weight: 800; letter-spacing: -0.5px; }
+    .logo span { color: var(--accent); }
+    nav a { color: var(--muted); text-decoration: none; font-size: 0.9rem; transition: color 0.2s; }
+    nav a:hover { color: var(--text); }
+    .nav-links { display: flex; gap: 32px; }
+    .nav-cta {
+      background: var(--accent); color: #fff; padding: 8px 20px;
+      border-radius: 8px; font-weight: 600; font-size: 0.875rem;
+      text-decoration: none; transition: opacity 0.2s;
+    }
+    .nav-cta:hover { opacity: 0.85; color: #fff; }
+
+    /* HERO */
+    .hero {
+      min-height: 100vh;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      text-align: center;
+      padding: 120px 24px 80px;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: radial-gradient(ellipse 80% 60% at 50% 0%, rgba(79,110,247,0.15) 0%, transparent 70%);
+    }
+    .hero-badge {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: rgba(79,110,247,0.12);
+      border: 1px solid rgba(79,110,247,0.3);
+      border-radius: 100px;
+      padding: 6px 16px;
+      font-size: 0.8rem; font-weight: 500; color: #a5b4fc;
+      margin-bottom: 32px;
+    }
+    .hero-badge::before {
+      content: '●'; color: var(--accent3); font-size: 0.5rem;
+      animation: pulse 2s infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; } 50% { opacity: 0.3; }
+    }
+    h1 {
+      font-size: clamp(2.5rem, 6vw, 5rem);
+      font-weight: 900;
+      line-height: 1.05;
+      letter-spacing: -2px;
+      max-width: 900px;
+      margin-bottom: 24px;
+    }
+    h1 em {
+      font-style: normal;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .hero-sub {
+      font-size: 1.2rem; color: var(--muted);
+      max-width: 580px; margin-bottom: 48px; line-height: 1.7;
+    }
+    .hero-actions { display: flex; gap: 16px; flex-wrap: wrap; justify-content: center; }
+    .btn-primary {
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      color: #fff; padding: 16px 36px; border-radius: 12px;
+      font-weight: 700; font-size: 1rem; text-decoration: none;
+      transition: transform 0.2s, box-shadow 0.2s;
+      box-shadow: 0 0 40px rgba(79,110,247,0.3);
+    }
+    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 0 60px rgba(79,110,247,0.4); }
+    .btn-secondary {
+      color: var(--text); padding: 16px 36px; border-radius: 12px;
+      font-weight: 600; font-size: 1rem; text-decoration: none;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      transition: border-color 0.2s;
+    }
+    .btn-secondary:hover { border-color: rgba(255,255,255,0.2); }
+
+    .hero-stats {
+      display: flex; gap: 48px; margin-top: 72px;
+      flex-wrap: wrap; justify-content: center;
+    }
+    .stat { text-align: center; }
+    .stat-num { font-size: 2rem; font-weight: 800; color: var(--text); }
+    .stat-label { font-size: 0.8rem; color: var(--muted); margin-top: 4px; }
+
+    /* SECTION */
+    section { padding: 100px 24px; max-width: 1100px; margin: 0 auto; }
+    .section-label {
+      font-size: 0.75rem; font-weight: 600; letter-spacing: 2px;
+      color: var(--accent); text-transform: uppercase; margin-bottom: 16px;
+    }
+    h2 {
+      font-size: clamp(1.8rem, 4vw, 3rem);
+      font-weight: 800; letter-spacing: -1px; line-height: 1.15;
+      margin-bottom: 16px;
+    }
+    .section-sub { color: var(--muted); font-size: 1.1rem; max-width: 540px; margin-bottom: 60px; }
+
+    /* AGENTS */
+    .agents-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 24px;
+    }
+    .agent-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 36px;
+      position: relative;
+      overflow: hidden;
+      transition: border-color 0.3s, transform 0.3s;
+    }
+    .agent-card:hover { border-color: rgba(255,255,255,0.15); transform: translateY(-4px); }
+    .agent-card.featured {
+      border-color: rgba(79,110,247,0.4);
+      background: linear-gradient(145deg, #0f1520, #111827);
+    }
+    .agent-card.featured::before {
+      content: 'Популярный';
+      position: absolute; top: 20px; right: 20px;
+      background: var(--accent); color: #fff;
+      font-size: 0.7rem; font-weight: 700; padding: 4px 12px;
+      border-radius: 100px; letter-spacing: 0.5px;
+    }
+    .agent-icon {
+      width: 56px; height: 56px; border-radius: 16px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.75rem; margin-bottom: 24px;
+    }
+    .icon-blue { background: rgba(79,110,247,0.15); }
+    .icon-purple { background: rgba(139,92,246,0.15); }
+    .icon-green { background: rgba(6,214,160,0.15); }
+    .agent-name { font-size: 1.3rem; font-weight: 700; margin-bottom: 8px; }
+    .agent-tagline { color: var(--muted); font-size: 0.9rem; margin-bottom: 24px; line-height: 1.6; }
+    .agent-scenarios { list-style: none; margin-bottom: 32px; }
+    .agent-scenarios li {
+      display: flex; align-items: flex-start; gap: 10px;
+      font-size: 0.875rem; color: var(--muted);
+      padding: 8px 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .agent-scenarios li:last-child { border-bottom: none; }
+    .agent-scenarios li::before {
+      content: '→'; color: var(--accent3); font-weight: 700; flex-shrink: 0; margin-top: 1px;
+    }
+    .agent-price {
+      display: flex; align-items: baseline; gap: 8px; margin-bottom: 20px;
+    }
+    .price-amount { font-size: 2rem; font-weight: 800; }
+    .price-period { color: var(--muted); font-size: 0.875rem; }
+    .btn-agent {
+      display: block; text-align: center;
+      padding: 12px; border-radius: 10px;
+      font-weight: 600; font-size: 0.9rem;
+      text-decoration: none; transition: all 0.2s; cursor: pointer;
+      border: none; width: 100%;
+    }
+    .btn-agent-primary {
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      color: #fff;
+    }
+    .btn-agent-secondary {
+      background: transparent;
+      color: var(--text);
+      border: 1px solid var(--border);
+    }
+    .btn-agent-secondary:hover { border-color: rgba(255,255,255,0.2); }
+
+    /* HOW IT WORKS */
+    .how-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 32px;
+    }
+    .how-step {
+      display: flex; flex-direction: column; gap: 16px;
+    }
+    .step-num {
+      width: 40px; height: 40px; border-radius: 10px;
+      background: rgba(79,110,247,0.15);
+      border: 1px solid rgba(79,110,247,0.3);
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 800; font-size: 0.875rem; color: var(--accent);
+    }
+    .step-title { font-weight: 700; font-size: 1.05rem; }
+    .step-desc { color: var(--muted); font-size: 0.875rem; line-height: 1.7; }
+
+    /* FORM SECTION */
+    .form-section {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      padding: 64px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+      max-width: 1100px;
+      margin: 0 auto 100px;
+    }
+    .form-section::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: radial-gradient(ellipse 60% 50% at 50% 0%, rgba(79,110,247,0.1) 0%, transparent 70%);
+    }
+    .form-section h2 { margin-bottom: 12px; }
+    .form-section p { color: var(--muted); margin-bottom: 40px; }
+    form {
+      display: flex; flex-direction: column; gap: 16px;
+      max-width: 480px; margin: 0 auto;
+      position: relative;
+    }
+    input, select, textarea {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      color: var(--text);
+      font-family: inherit;
+      font-size: 0.95rem;
+      padding: 14px 16px;
+      width: 100%;
+      transition: border-color 0.2s;
+      outline: none;
+    }
+    input:focus, select:focus, textarea:focus {
+      border-color: rgba(79,110,247,0.5);
+    }
+    input::placeholder, textarea::placeholder { color: var(--muted); }
+    select option { background: var(--bg); }
+    textarea { resize: vertical; min-height: 100px; }
+    .form-submit {
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      color: #fff; border: none; border-radius: 10px;
+      padding: 16px; font-size: 1rem; font-weight: 700;
+      cursor: pointer; transition: opacity 0.2s;
+    }
+    .form-submit:hover { opacity: 0.9; }
+    .form-note { font-size: 0.8rem; color: var(--muted); margin-top: 8px; }
+    .success-msg {
+      display: none;
+      background: rgba(6,214,160,0.1);
+      border: 1px solid rgba(6,214,160,0.3);
+      border-radius: 12px;
+      padding: 24px;
+      color: var(--accent3);
+      font-weight: 600;
+    }
+
+    /* FOOTER */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 40px 24px;
+      text-align: center;
+      color: var(--muted);
+      font-size: 0.85rem;
+    }
+    footer .logo { display: inline-block; margin-bottom: 12px; }
+
+    /* TICKER */
+    .ticker-wrap {
+      background: var(--surface);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      overflow: hidden; padding: 12px 0;
+    }
+    .ticker {
+      display: flex; gap: 64px; width: max-content;
+      animation: ticker 30s linear infinite;
+    }
+    .ticker-item { white-space: nowrap; font-size: 0.8rem; color: var(--muted); }
+    .ticker-item span { color: var(--accent3); font-weight: 600; }
+    @keyframes ticker {
+      from { transform: translateX(0); }
+      to { transform: translateX(-50%); }
+    }
+
+    @media (max-width: 768px) {
+      nav { padding: 14px 20px; }
+      .nav-links { display: none; }
+      .form-section { padding: 40px 24px; }
+      .hero-stats { gap: 32px; }
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <div class="logo">Agent<span>Flow</span></div>
+  <div class="nav-links">
+    <a href="#agents">Агенты</a>
+    <a href="#how">Как работает</a>
+    <a href="#order">Цены</a>
+  </div>
+  <a href="#order" class="nav-cta">Получить агента →</a>
+</nav>
+
+<!-- TICKER -->
+<div class="ticker-wrap" style="margin-top:64px;">
+  <div class="ticker">
+    <div class="ticker-item">AI-агенты автоматизируют <span>80% рутинных задач</span></div>
+    <div class="ticker-item">Стоимость AI снизилась на <span>92% за 3 года</span></div>
+    <div class="ticker-item">Рынок AI-агентов растёт на <span>47% в год</span></div>
+    <div class="ticker-item">Ваши конкуренты уже внедряют <span>AI-агентов</span></div>
+    <div class="ticker-item">AI-агенты работают <span>24/7 без выходных</span></div>
+    <div class="ticker-item">AI-агенты автоматизируют <span>80% рутинных задач</span></div>
+    <div class="ticker-item">Стоимость AI снизилась на <span>92% за 3 года</span></div>
+    <div class="ticker-item">Рынок AI-агентов растёт на <span>47% в год</span></div>
+    <div class="ticker-item">Ваши конкуренты уже внедряют <span>AI-агентов</span></div>
+    <div class="ticker-item">AI-агенты работают <span>24/7 без выходных</span></div>
+  </div>
+</div>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-badge">2026 · Эпоха автономных агентов</div>
+  <h1>Ваш бизнес на автопилоте.<br /><em>Готовые AI-агенты</em><br />уже завтра.</h1>
+  <p class="hero-sub">
+    Пока вы спите — агент отвечает клиентам, мониторит почту, делает покупки
+    и выполняет рутину. Без найма. Без обучения. Подключение за 24 часа.
+  </p>
+  <div class="hero-actions">
+    <a href="#order" class="btn-primary">Выбрать агента →</a>
+    <a href="#agents" class="btn-secondary">Посмотреть агентов</a>
+  </div>
+  <div class="hero-stats">
+    <div class="stat">
+      <div class="stat-num">24/7</div>
+      <div class="stat-label">Без выходных и перерывов</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num">&lt; 24ч</div>
+      <div class="stat-label">До запуска агента</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num">80%</div>
+      <div class="stat-label">Рутины уходит навсегда</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num">×5</div>
+      <div class="stat-label">Скорость обработки задач</div>
+    </div>
+  </div>
+</div>
+
+<!-- AGENTS -->
+<section id="agents">
+  <div class="section-label">Наши агенты</div>
+  <h2>Три готовых агента.<br />Один под вашу задачу.</h2>
+  <p class="section-sub">Каждый агент обучен на конкретных сценариях и готов к работе сразу после подключения.</p>
+
+  <div class="agents-grid">
+
+    <!-- SHOPBOT -->
+    <div class="agent-card featured">
+      <div class="agent-icon icon-blue">🛍️</div>
+      <div class="agent-name">ShopBot</div>
+      <div class="agent-tagline">AI-агент для онлайн-магазинов. Отвечает клиентам, обрабатывает заказы и повышает конверсию круглосуточно.</div>
+      <ul class="agent-scenarios">
+        <li>Отвечает на вопросы о товарах, наличии, доставке мгновенно</li>
+        <li>Обрабатывает возвраты и жалобы без участия менеджера</li>
+        <li>Отслеживает статус заказов и уведомляет клиентов</li>
+        <li>Допродаёт сопутствующие товары (+23% к среднему чеку)</li>
+        <li>Собирает отзывы после доставки автоматически</li>
+      </ul>
+      <div class="agent-price">
+        <span class="price-amount">от $99</span>
+        <span class="price-period">/ месяц</span>
+      </div>
+      <button class="btn-agent btn-agent-primary" onclick="selectAgent('ShopBot')">Подключить ShopBot →</button>
+    </div>
+
+    <!-- BRIEFBOT -->
+    <div class="agent-card">
+      <div class="agent-icon icon-purple">📊</div>
+      <div class="agent-name">BriefBot</div>
+      <div class="agent-tagline">Ваш личный аналитик. Читает почту, мониторит новости по вашим темам и каждое утро даёт готовую сводку.</div>
+      <ul class="agent-scenarios">
+        <li>Утренняя сводка: важные письма + новости за ночь</li>
+        <li>Мониторинг упоминаний вашего бренда и конкурентов</li>
+        <li>Фильтрует спам, выделяет срочные письма</li>
+        <li>Дайджест по вашим темам: рынок, ниша, партнёры</li>
+        <li>Еженедельный отчёт с аналитикой и рекомендациями</li>
+      </ul>
+      <div class="agent-price">
+        <span class="price-amount">от $59</span>
+        <span class="price-period">/ месяц</span>
+      </div>
+      <button class="btn-agent btn-agent-secondary" onclick="selectAgent('BriefBot')">Подключить BriefBot →</button>
+    </div>
+
+    <!-- TASKBOT -->
+    <div class="agent-card">
+      <div class="agent-icon icon-green">⚡</div>
+      <div class="agent-name">TaskBot</div>
+      <div class="agent-tagline">Автономный исполнитель. Делает покупки, бронирования, заполняет формы и выполняет любую рутину в интернете по вашей команде.</div>
+      <ul class="agent-scenarios">
+        <li>Покупает товары и расходники по заданным критериям</li>
+        <li>Бронирует отели, билеты, встречи по вашим предпочтениям</li>
+        <li>Заполняет формы, регистрации, документы</li>
+        <li>Мониторит цены и покупает когда выгодно</li>
+        <li>Выполняет любые повторяющиеся задачи онлайн</li>
+      </ul>
+      <div class="agent-price">
+        <span class="price-amount">от $149</span>
+        <span class="price-period">/ месяц</span>
+      </div>
+      <button class="btn-agent btn-agent-secondary" onclick="selectAgent('TaskBot')">Подключить TaskBot →</button>
+    </div>
+
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section id="how" style="border-top: 1px solid var(--border);">
+  <div class="section-label">Как это работает</div>
+  <h2>От заявки до запуска<br />за 24 часа.</h2>
+  <p class="section-sub">Никакого кода и сложной настройки. Мы всё делаем за вас.</p>
+  <div class="how-grid">
+    <div class="how-step">
+      <div class="step-num">01</div>
+      <div class="step-title">Выберите агента</div>
+      <div class="step-desc">Заполните заявку — укажите какой агент нужен и опишите ваш бизнес в двух словах.</div>
+    </div>
+    <div class="how-step">
+      <div class="step-num">02</div>
+      <div class="step-title">Созвон 30 минут</div>
+      <div class="step-desc">Обсуждаем ваши сценарии, подключаем к вашим системам и настраиваем под специфику бизнеса.</div>
+    </div>
+    <div class="how-step">
+      <div class="step-num">03</div>
+      <div class="step-title">Агент запускается</div>
+      <div class="step-desc">В течение 24 часов агент выходит на работу. Вы получаете доступ в личный кабинет.</div>
+    </div>
+    <div class="how-step">
+      <div class="step-num">04</div>
+      <div class="step-title">Вы наблюдаете</div>
+      <div class="step-desc">Следите за работой агента, корректируйте задачи, получайте отчёты. Мы на связи 24/7.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ORDER FORM -->
+<div id="order" style="padding: 0 24px;">
+  <div class="form-section">
+    <div class="section-label" style="margin-bottom:16px;">Оставить заявку</div>
+    <h2>Готовы запустить агента?</h2>
+    <p>Заполните форму — мы свяжемся в течение 2 часов и запустим агента уже завтра.</p>
+
+    <form id="orderForm" onsubmit="submitForm(event)">
+      <input type="text" name="name" placeholder="Ваше имя" required />
+      <input type="tel" name="phone" placeholder="Телефон или Telegram" required />
+      <input type="email" name="email" placeholder="Email" required />
+      <input type="text" name="business" placeholder="Ваш бизнес (кратко)" required />
+      <select name="agent" id="agentSelect" required>
+        <option value="" disabled selected>Выберите агента</option>
+        <option value="ShopBot">ShopBot — для онлайн-магазина ($99/мес)</option>
+        <option value="BriefBot">BriefBot — сводка и аналитика ($59/мес)</option>
+        <option value="TaskBot">TaskBot — автономный исполнитель ($149/мес)</option>
+        <option value="all">Все три агента (скидка 30%)</option>
+      </select>
+      <textarea name="comment" placeholder="Расскажите подробнее о задаче (необязательно)"></textarea>
+      <button type="submit" class="form-submit">Отправить заявку →</button>
+      <p class="form-note">🔒 Никакого спама. Только один звонок от нас.</p>
+    </form>
+    <div class="success-msg" id="successMsg">
+      ✅ Заявка получена! Мы напишем вам в течение 2 часов.
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div class="logo">Agent<span>Flow</span></div>
+  <p>© 2026 AgentFlow. Автономные AI-агенты для вашего бизнеса.</p>
+</footer>
+
+<script>
+  function selectAgent(name) {
+    document.getElementById('agentSelect').value = name;
+    document.getElementById('order').scrollIntoView({ behavior: 'smooth' });
+  }
+
+  function submitForm(e) {
+    e.preventDefault();
+    const form = document.getElementById('orderForm');
+    const data = new FormData(form);
+    // In production: send to your backend / CRM
+    console.log('Order:', Object.fromEntries(data));
+    form.style.display = 'none';
+    document.getElementById('successMsg').style.display = 'block';
+  }
+</script>
+
+</body>
+</html>
