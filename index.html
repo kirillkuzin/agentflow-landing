@@ -4,244 +4,381 @@
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>UNIT-7 // Personal AI Agent</title>
-<meta name="description" content="Your personal AI agent. Always online. Orders food, books restaurants, monitors prices, briefs you every morning."/>
+<meta name="description" content="Your personal AI robot. Pre-configured and ready to deploy. Upgrade with real-world action skills."/>
 <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=VT323&display=swap" rel="stylesheet"/>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-:root{--bg:#030805;--bg2:#071009;--bg3:#0a180d;--green:#00ff41;--green2:#39ff14;--green3:#00cc33;--green-dim:#00441a;--amber:#ffb000;--text:#c8ffd4;--muted:#4a8c5c;--border:#0d3318;--scan:rgba(0,255,65,0.03)}
+:root{--bg:#030805;--bg2:#071009;--bg3:#0a180d;--green:#00ff41;--green3:#00cc33;--green-dim:#00441a;--amber:#ffb000;--red:#ff4444;--text:#c8ffd4;--muted:#4a8c5c;--border:#0d3318;--scan:rgba(0,255,65,0.03)}
 html{scroll-behavior:smooth}
-body{font-family:'Share Tech Mono',monospace;background:var(--bg);color:var(--text);overflow-x:hidden;line-height:1.6;position:relative}
-body::before{content:'';position:fixed;inset:0;z-index:9999;pointer-events:none;background:repeating-linear-gradient(0deg,transparent,transparent 2px,var(--scan) 2px,var(--scan) 4px);animation:scanmove 8s linear infinite}
-@keyframes scanmove{0%{background-position:0 0}100%{background-position:0 100px}}
+body{font-family:'Share Tech Mono',monospace;background:var(--bg);color:var(--text);overflow-x:hidden;line-height:1.6}
+body::before{content:'';position:fixed;inset:0;z-index:9999;pointer-events:none;background:repeating-linear-gradient(0deg,transparent,transparent 2px,var(--scan) 2px,var(--scan) 4px);animation:sm 8s linear infinite}
+@keyframes sm{0%{background-position:0 0}100%{background-position:0 100px}}
 nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:12px 40px;background:rgba(3,8,5,0.92);border-bottom:1px solid var(--border);backdrop-filter:blur(8px)}
 .logo{font-family:'VT323',monospace;font-size:1.6rem;color:var(--green);letter-spacing:2px}
 .logo span{color:var(--amber)}
-.nav-links{display:flex;gap:28px;align-items:center}
-.nav-links a{color:var(--muted);text-decoration:none;font-size:.8rem;letter-spacing:1px;transition:color .2s}
-.nav-links a:hover{color:var(--green)}
-.nav-cta{border:1px solid var(--green);color:var(--green);padding:6px 18px;text-decoration:none;font-size:.8rem;letter-spacing:2px;transition:all .2s;cursor:pointer;background:transparent}
-.nav-cta:hover{background:var(--green);color:var(--bg)}
+.nl{display:flex;gap:28px;align-items:center}
+.nl a{color:var(--muted);text-decoration:none;font-size:.8rem;letter-spacing:1px;transition:color .2s}
+.nl a:hover{color:var(--green)}
+.ncta{border:1px solid var(--green);color:var(--green);padding:6px 18px;text-decoration:none;font-size:.8rem;letter-spacing:2px;transition:all .2s}
+.ncta:hover{background:var(--green);color:var(--bg)}
+
+/* HERO */
 .hero{min-height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:100px 20px 60px;position:relative;overflow:hidden}
 #matrix{position:absolute;inset:0;width:100%;height:100%;opacity:.15}
-.hero-badge{display:inline-block;border:1px solid var(--green-dim);color:var(--muted);font-size:.75rem;letter-spacing:3px;padding:4px 16px;margin-bottom:24px;position:relative;z-index:1}
-.hero-badge::before{content:'▶ '}
-.hero-title{font-family:'VT323',monospace;font-size:clamp(3rem,8vw,7rem);color:var(--green);line-height:1;margin-bottom:12px;animation:glitch 4s infinite;text-shadow:0 0 20px rgba(0,255,65,.4);position:relative;z-index:1}
-@keyframes glitch{0%,94%,100%{transform:translate(0);text-shadow:0 0 20px rgba(0,255,65,.4)}95%{transform:translate(-3px,1px);text-shadow:-3px 0 var(--amber),3px 0 #ff0040}96%{transform:translate(3px,-1px);text-shadow:3px 0 var(--amber),-3px 0 #ff0040}97%{transform:translate(-1px,2px)}98%{transform:translate(2px,-1px)}99%{transform:translate(0);text-shadow:0 0 20px rgba(0,255,65,.4)}}
-.hero-sub{font-size:clamp(1rem,2.5vw,1.4rem);color:var(--amber);letter-spacing:4px;margin-bottom:8px;font-family:'VT323',monospace;position:relative;z-index:1}
-.hero-desc{max-width:620px;color:var(--muted);font-size:.9rem;margin-bottom:40px;line-height:1.8;position:relative;z-index:1}
-.hero-desc em{color:var(--green);font-style:normal}
-.btn-primary{display:inline-block;border:2px solid var(--green);color:var(--green);padding:14px 40px;font-family:'Share Tech Mono',monospace;font-size:1rem;letter-spacing:3px;text-decoration:none;transition:all .25s;cursor:pointer;background:transparent;position:relative;z-index:1}
-.btn-primary:hover{background:var(--green);color:var(--bg)}
-.hero-stats{display:flex;gap:60px;margin-top:60px;border-top:1px solid var(--border);padding-top:40px;position:relative;z-index:1}
-.stat{text-align:center}
+.z1{position:relative;z-index:1}
+.badge{display:inline-block;border:1px solid var(--green-dim);color:var(--muted);font-size:.75rem;letter-spacing:3px;padding:4px 16px;margin-bottom:24px}
+.badge::before{content:'▶ '}
+.htitle{font-family:'VT323',monospace;font-size:clamp(3rem,8vw,7rem);color:var(--green);line-height:1;margin-bottom:12px;animation:glitch 4s infinite;text-shadow:0 0 20px rgba(0,255,65,.4)}
+@keyframes glitch{0%,94%,100%{transform:translate(0);text-shadow:0 0 20px rgba(0,255,65,.4)}95%{transform:translate(-3px,1px);text-shadow:-3px 0 var(--amber),3px 0 #ff0040}96%{transform:translate(3px,-1px);text-shadow:3px 0 var(--amber),-3px 0 #ff0040}97%{transform:translate(-1px,2px)}98%{transform:translate(2px,-1px)}99%{transform:translate(0)}}
+.hsub{font-size:clamp(1rem,2.5vw,1.4rem);color:var(--amber);letter-spacing:4px;margin-bottom:8px;font-family:'VT323',monospace}
+.hdesc{max-width:640px;color:var(--muted);font-size:.9rem;margin-bottom:40px;line-height:1.9}
+.hdesc em{color:var(--green);font-style:normal}
+.btn{display:inline-block;border:2px solid var(--green);color:var(--green);padding:14px 40px;font-family:'Share Tech Mono',monospace;font-size:1rem;letter-spacing:3px;text-decoration:none;transition:all .25s}
+.btn:hover{background:var(--green);color:var(--bg)}
+.hstats{display:flex;gap:60px;margin-top:60px;border-top:1px solid var(--border);padding-top:40px}
 .stat-val{font-family:'VT323',monospace;font-size:2.5rem;color:var(--green)}
-.stat-label{font-size:.7rem;color:var(--muted);letter-spacing:2px}
-section{padding:80px 20px;max-width:1100px;margin:0 auto}
-.section-tag{font-size:.7rem;letter-spacing:4px;color:var(--muted);margin-bottom:8px}
-.section-tag::before{content:'// '}
-.section-title{font-family:'VT323',monospace;font-size:clamp(2rem,4vw,3rem);color:var(--green);margin-bottom:40px}
-.skill-builder{background:var(--bg2);padding:80px 20px;border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
-.skill-builder-inner{max-width:1000px;margin:0 auto}
+.stat-lbl{font-size:.7rem;color:var(--muted);letter-spacing:2px}
+.terminal{background:var(--bg3);border:1px solid var(--border);padding:24px;margin-top:40px;font-size:.82rem;max-width:560px;width:100%}
+.tbar{display:flex;gap:8px;margin-bottom:16px;padding-bottom:12px;border-bottom:1px solid var(--border)}
+.td{width:10px;height:10px;border-radius:50%}
+.td:nth-child(1){background:#ff5f57}.td:nth-child(2){background:#febc2e}.td:nth-child(3){background:#28c840}
+.tl{color:var(--muted);line-height:2}
+.tl .g{color:var(--green)}.tl .w{color:var(--text)}
+.cursor{display:inline-block;width:8px;height:1em;background:var(--green);animation:blink .8s infinite;vertical-align:text-bottom}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
+
+/* WHAT YOU GET */
+.what{padding:80px 20px;border-bottom:1px solid var(--border)}
+.what-inner{max-width:1000px;margin:0 auto}
+.stag{font-size:.7rem;letter-spacing:4px;color:var(--muted);margin-bottom:8px}
+.stag::before{content:'// '}
+.stitle{font-family:'VT323',monospace;font-size:clamp(2rem,4vw,3rem);color:var(--green);margin-bottom:40px}
+
+.tiers-compare{display:grid;grid-template-columns:1fr 1fr;gap:2px;margin-bottom:0}
+.tier{border:1px solid var(--border);padding:36px 32px;background:var(--bg2)}
+.tier.premium{border-color:var(--amber);background:rgba(255,176,0,.03)}
+.tier-label{font-size:.65rem;letter-spacing:3px;color:var(--muted);margin-bottom:8px}
+.tier-name{font-family:'VT323',monospace;font-size:1.8rem;margin-bottom:4px}
+.tier.base .tier-name{color:var(--green)}
+.tier.premium .tier-name{color:var(--amber)}
+.tier-price{font-family:'VT323',monospace;font-size:3rem;line-height:1;margin-bottom:4px}
+.tier.base .tier-price{color:var(--green)}
+.tier.premium .tier-price{color:var(--amber)}
+.tier-period{font-size:.75rem;color:var(--muted);margin-bottom:24px}
+.feature-list{list-style:none}
+.feature-list li{font-size:.82rem;color:var(--muted);padding:8px 0;border-bottom:1px solid var(--border);display:flex;gap:10px;align-items:flex-start}
+.fi{flex-shrink:0}
+.tier.base .fi{color:var(--green)}
+.tier.premium .fi{color:var(--amber)}
+.tier-note{font-size:.75rem;color:var(--muted);margin-top:20px;padding:12px;border:1px solid var(--border);line-height:1.6}
+.tier.base .tier-note{border-color:var(--green-dim)}
+.tier.premium .tier-note{border-color:rgba(255,176,0,.3)}
+
+/* SKILL BUILDER */
+.sb{background:var(--bg2);padding:80px 20px;border-bottom:1px solid var(--border)}
+.sb-inner{max-width:1000px;margin:0 auto}
 .skills-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px;margin-bottom:32px}
-.skill-card{border:1px solid var(--border);background:var(--bg3);padding:20px;cursor:pointer;transition:all .2s;position:relative;overflow:hidden}
-.skill-card::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:var(--green);transform:scaleX(0);transition:transform .3s}
-.skill-card:hover::before,.skill-card.active::before{transform:scaleX(1)}
-.skill-card.active{border-color:var(--green3);background:rgba(0,255,65,.04)}
-.skill-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px}
-.skill-icon{font-size:2rem}
-.skill-toggle{width:44px;height:22px;border:1px solid var(--muted);background:transparent;border-radius:0;cursor:pointer;position:relative;transition:border-color .2s;flex-shrink:0}
-.skill-toggle::after{content:'';position:absolute;left:2px;top:2px;width:16px;height:16px;background:var(--muted);transition:all .2s}
-.skill-card.active .skill-toggle{border-color:var(--green)}
-.skill-card.active .skill-toggle::after{background:var(--green);left:24px}
-.skill-name{font-family:'VT323',monospace;font-size:1.3rem;color:var(--text);letter-spacing:1px}
-.skill-desc{font-size:.78rem;color:var(--muted);margin-bottom:12px;line-height:1.5}
-.skill-price{font-size:.8rem;color:var(--amber);letter-spacing:2px}
-.skill-rank{font-size:.65rem;color:var(--green3);margin-bottom:4px;letter-spacing:1px}
-.cost-display{border:1px solid var(--green-dim);padding:24px 32px;background:var(--bg3);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:20px}
+.sc{border:1px solid var(--border);background:var(--bg3);padding:20px;cursor:pointer;transition:all .2s;position:relative}
+.sc::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:var(--amber);transform:scaleX(0);transition:transform .3s}
+.sc:hover::before,.sc.active::before{transform:scaleX(1)}
+.sc.active{border-color:rgba(255,176,0,.4);background:rgba(255,176,0,.03)}
+.sc-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px}
+.sc-icon{font-size:2rem}
+.sc-toggle{width:44px;height:22px;border:1px solid var(--muted);background:transparent;cursor:pointer;position:relative;flex-shrink:0}
+.sc-toggle::after{content:'';position:absolute;left:2px;top:2px;width:16px;height:16px;background:var(--muted);transition:all .2s}
+.sc.active .sc-toggle{border-color:var(--amber)}
+.sc.active .sc-toggle::after{background:var(--amber);left:24px}
+.sc-tag{font-size:.65rem;color:var(--amber);letter-spacing:2px;margin-bottom:4px}
+.sc-name{font-family:'VT323',monospace;font-size:1.3rem;color:var(--text);letter-spacing:1px}
+.sc-desc{font-size:.78rem;color:var(--muted);margin-bottom:8px;line-height:1.5}
+.sc-powered{font-size:.68rem;color:var(--green3);margin-bottom:8px}
+.sc-price{font-size:.8rem;color:var(--amber);letter-spacing:2px}
+
+/* BASE SKILLS (included) */
+.base-skills{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin-bottom:40px}
+.bsc{border:1px solid var(--green-dim);padding:16px;background:rgba(0,255,65,.02)}
+.bsc-icon{font-size:1.4rem;margin-bottom:6px}
+.bsc-name{font-family:'VT323',monospace;font-size:1.1rem;color:var(--green)}
+.bsc-desc{font-size:.75rem;color:var(--muted)}
+.included-badge{font-size:.65rem;letter-spacing:2px;color:var(--green3);margin-bottom:4px}
+
+.cost-display{border:1px solid rgba(255,176,0,.3);padding:24px 32px;background:var(--bg3);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:20px}
 .cost-label{color:var(--muted);font-size:.8rem;letter-spacing:3px}
-.cost-val{font-family:'VT323',monospace;font-size:3rem;color:var(--green);text-shadow:0 0 20px rgba(0,255,65,.5);transition:all .3s}
+.cost-val{font-family:'VT323',monospace;font-size:3rem;color:var(--amber);text-shadow:0 0 20px rgba(255,176,0,.4);transition:all .3s}
 .cost-breakdown{font-size:.75rem;color:var(--muted);margin-top:4px}
-.cost-cta{border:1px solid var(--green);color:var(--green);padding:12px 28px;font-family:'Share Tech Mono',monospace;font-size:.85rem;letter-spacing:2px;cursor:pointer;background:transparent;transition:all .2s;text-decoration:none;display:inline-block}
-.cost-cta:hover{background:var(--green);color:var(--bg)}
+.cost-cta{border:1px solid var(--amber);color:var(--amber);padding:12px 28px;font-family:'Share Tech Mono',monospace;font-size:.85rem;letter-spacing:2px;cursor:pointer;background:transparent;transition:all .2s;text-decoration:none;display:inline-block}
+.cost-cta:hover{background:var(--amber);color:var(--bg)}
+
+/* STEPS */
+.swrap{border-bottom:1px solid var(--border)}
+section{padding:80px 20px;max-width:1100px;margin:0 auto}
 .steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:2px}
 .step{background:var(--bg2);padding:32px;border:1px solid var(--border);position:relative}
 .step-num{font-family:'VT323',monospace;font-size:5rem;color:var(--green-dim);position:absolute;top:16px;right:20px;line-height:1}
 .step-code{color:var(--amber);font-size:.7rem;letter-spacing:3px;margin-bottom:12px}
 .step-title{font-family:'VT323',monospace;font-size:1.6rem;color:var(--green);margin-bottom:8px}
 .step-desc{font-size:.82rem;color:var(--muted);line-height:1.6}
-.why-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px}
-.why-card{border:1px solid var(--border);padding:28px 24px;background:var(--bg2);transition:border-color .2s}
-.why-card:hover{border-color:var(--green-dim)}
-.why-icon{font-size:1.8rem;margin-bottom:12px}
-.why-title{font-family:'VT323',monospace;font-size:1.3rem;color:var(--green);margin-bottom:8px}
-.why-desc{font-size:.8rem;color:var(--muted);line-height:1.6}
-.pricing-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:2px}
-.plan{border:1px solid var(--border);padding:36px 28px;background:var(--bg2);position:relative;transition:border-color .2s}
-.plan.featured{border-color:var(--green);background:rgba(0,255,65,.03)}
-.plan-badge{position:absolute;top:-1px;left:50%;transform:translateX(-50%);background:var(--green);color:var(--bg);font-size:.65rem;letter-spacing:3px;padding:3px 14px;white-space:nowrap}
-.plan-name{font-family:'VT323',monospace;font-size:1.6rem;color:var(--amber);letter-spacing:2px;margin-bottom:4px}
-.plan-price{font-family:'VT323',monospace;font-size:3.5rem;color:var(--green);line-height:1}
+
+/* PRICING */
+.pgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:2px}
+.plan{border:1px solid var(--border);padding:36px 28px;background:var(--bg2);position:relative}
+.plan.feat{border-color:var(--amber);background:rgba(255,176,0,.03)}
+.plan-badge{position:absolute;top:-1px;left:50%;transform:translateX(-50%);background:var(--amber);color:var(--bg);font-size:.65rem;letter-spacing:3px;padding:3px 14px;white-space:nowrap}
+.plan-name{font-family:'VT323',monospace;font-size:1.6rem;letter-spacing:2px;margin-bottom:4px}
+.plan.p0 .plan-name{color:var(--green)}.plan.p1 .plan-name,.plan.feat .plan-name{color:var(--amber)}.plan.p2 .plan-name{color:var(--text)}
+.plan-price{font-family:'VT323',monospace;font-size:3.5rem;line-height:1}
+.plan.p0 .plan-price{color:var(--green)}.plan.feat .plan-price{color:var(--amber)}.plan.p2 .plan-price{color:var(--text)}
 .plan-period{font-size:.75rem;color:var(--muted);margin-bottom:20px}
-.plan-features{list-style:none;margin-bottom:28px}
-.plan-features li{font-size:.8rem;color:var(--muted);padding:7px 0;border-bottom:1px solid var(--border)}
-.plan-features li::before{content:'▸ ';color:var(--green)}
-.plan-btn{display:block;text-align:center;border:1px solid var(--green);color:var(--green);padding:12px;font-family:'Share Tech Mono',monospace;font-size:.8rem;letter-spacing:2px;text-decoration:none;transition:all .2s;cursor:pointer;background:transparent}
-.plan.featured .plan-btn{background:var(--green);color:var(--bg)}
-.plan-btn:hover{background:var(--green);color:var(--bg)}
-.terminal{background:var(--bg3);border:1px solid var(--border);padding:24px;margin:40px 0 0;font-size:.82rem;max-width:560px;position:relative;z-index:1}
-.terminal-bar{display:flex;gap:8px;margin-bottom:16px;padding-bottom:12px;border-bottom:1px solid var(--border)}
-.t-dot{width:10px;height:10px;border-radius:50%}
-.t-dot:nth-child(1){background:#ff5f57}.t-dot:nth-child(2){background:#febc2e}.t-dot:nth-child(3){background:#28c840}
-.terminal-line{color:var(--muted);line-height:2}
-.terminal-line .cmd{color:var(--green)}.terminal-line .out{color:var(--text)}
-.cursor{display:inline-block;width:8px;height:1em;background:var(--green);animation:blink .8s infinite;vertical-align:text-bottom}
-@keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
-.section-wrapper{border-bottom:1px solid var(--border)}
+.plan-inc{font-size:.68rem;color:var(--muted);letter-spacing:2px;margin-bottom:8px;margin-top:16px}
+.pfl{list-style:none;margin-bottom:28px}
+.pfl li{font-size:.8rem;color:var(--muted);padding:7px 0;border-bottom:1px solid var(--border)}
+.pfl li.g::before{content:'▸ ';color:var(--green)}
+.pfl li.a::before{content:'◆ ';color:var(--amber)}
+.pbtn{display:block;text-align:center;border:1px solid var(--green);color:var(--green);padding:12px;font-family:'Share Tech Mono',monospace;font-size:.8rem;letter-spacing:2px;text-decoration:none;transition:all .2s}
+.plan.feat .pbtn{background:var(--amber);color:var(--bg);border-color:var(--amber)}
+.pbtn:hover{background:var(--green);color:var(--bg)}
+.plan.feat .pbtn:hover{background:var(--amber);opacity:.85}
+
 footer{border-top:1px solid var(--border);padding:32px 40px;text-align:center;font-size:.75rem;color:var(--muted);letter-spacing:2px}
 footer a{color:var(--muted);text-decoration:none}
 footer a:hover{color:var(--green)}
-@media(max-width:600px){nav{padding:12px 20px}.nav-links{gap:12px}.hero-stats{gap:24px;flex-wrap:wrap;justify-content:center}.cost-display{flex-direction:column;text-align:center}section{padding:60px 16px}}
+@media(max-width:700px){nav{padding:12px 16px}.nl{gap:12px}.hstats{gap:24px;flex-wrap:wrap;justify-content:center}.tiers-compare{grid-template-columns:1fr}.cost-display{flex-direction:column;text-align:center}section{padding:60px 16px}}
 </style>
 </head>
 <body>
 <nav>
   <div class="logo">UNIT<span>-7</span></div>
-  <div class="nav-links">
-    <a href="#skills">SKILLS</a>
-    <a href="#how">HOW IT WORKS</a>
+  <div class="nl">
+    <a href="#what">WHAT YOU GET</a>
+    <a href="#skills">SKILL MODULES</a>
     <a href="#pricing">PRICING</a>
-    <a href="#pricing" class="nav-cta">&gt; DEPLOY</a>
+    <a href="#pricing" class="ncta">&gt; DEPLOY</a>
   </div>
 </nav>
 
+<!-- HERO -->
 <div class="hero">
   <canvas id="matrix"></canvas>
-  <div class="hero-badge">PERSONAL COMBAT UNIT // SERIES 7 // CLASSIFIED</div>
-  <h1 class="hero-title">UNIT-7</h1>
-  <div class="hero-sub">YOUR AI AGENT. ALWAYS ONLINE. ALWAYS WORKING.</div>
-  <p class="hero-desc">While you sleep, your agent <em>orders food</em>, <em>monitors prices</em>, <em>books reservations</em> and <em>briefs you every morning</em>.<br>Privacy-first. Deployed on your own server. No Big Tech data harvesting.</p>
-  <a href="#pricing" class="btn-primary">&gt;&gt; DEPLOY YOUR AGENT</a>
-  <div class="terminal">
-    <div class="terminal-bar"><div class="t-dot"></div><div class="t-dot"></div><div class="t-dot"></div></div>
-    <div class="terminal-line"><span class="cmd">$ </span><span class="out">unit7 status</span></div>
-    <div class="terminal-line"><span style="color:var(--muted)">▸ Agent online ............. </span><span class="cmd">OK</span></div>
-    <div class="terminal-line"><span style="color:var(--muted)">▸ Skills loaded ............ </span><span class="cmd">5/5</span></div>
-    <div class="terminal-line"><span style="color:var(--muted)">▸ Last action .............. </span><span class="out">Ordered pizza 3h ago</span></div>
-    <div class="terminal-line"><span style="color:var(--muted)">▸ Morning brief ............ </span><span class="out">Queued for 08:00</span></div>
-    <div class="terminal-line"><span class="cmd">$ </span><span class="cursor"></span></div>
+  <div class="badge z1">PERSONAL AI UNIT // SERIES 7 // READY TO DEPLOY</div>
+  <h1 class="htitle z1">UNIT-7</h1>
+  <div class="hsub z1">YOUR ROBOT. PRE-CONFIGURED. ALWAYS WORKING.</div>
+  <p class="hdesc z1">
+    We built and configured your personal AI agent so you don't have to.<br>
+    It <em>chats, remembers, reminds, and briefs you every morning</em> — out of the box.<br>
+    Upgrade with real-world action skills: <em>order food, book flights, monitor prices</em>.
+  </p>
+  <a href="#what" class="btn z1">&gt;&gt; SEE WHAT'S INCLUDED</a>
+  <div class="terminal z1">
+    <div class="tbar"><div class="td"></div><div class="td"></div><div class="td"></div></div>
+    <div class="tl"><span class="g">$ </span><span class="w">unit7 status</span></div>
+    <div class="tl"><span style="color:var(--muted)">▸ Unit online .............. </span><span class="g">OK</span></div>
+    <div class="tl"><span style="color:var(--muted)">▸ Base skills .............. </span><span class="g">INCLUDED</span></div>
+    <div class="tl"><span style="color:var(--muted)">▸ Food module .............. </span><span class="w">ACTIVE</span></div>
+    <div class="tl"><span style="color:var(--muted)">▸ Morning brief ............ </span><span class="w">Queued 08:00</span></div>
+    <div class="tl"><span class="g">$ </span><span class="cursor"></span></div>
   </div>
-  <div class="hero-stats">
-    <div class="stat"><div class="stat-val">24/7</div><div class="stat-label">ALWAYS ONLINE</div></div>
-    <div class="stat"><div class="stat-val">5</div><div class="stat-label">SKILL MODULES</div></div>
-    <div class="stat"><div class="stat-val">0</div><div class="stat-label">DATA TO BIG TECH</div></div>
-    <div class="stat"><div class="stat-val">€9</div><div class="stat-label">START PRICE/MO</div></div>
+  <div class="hstats z1">
+    <div class="stat"><div class="stat-val">24/7</div><div class="stat-lbl">ALWAYS ONLINE</div></div>
+    <div class="stat"><div class="stat-val">€2</div><div class="stat-lbl">STARTS FROM</div></div>
+    <div class="stat"><div class="stat-val">0</div><div class="stat-lbl">SETUP REQUIRED</div></div>
+    <div class="stat"><div class="stat-val">∞</div><div class="stat-lbl">UPGRADEABLE</div></div>
   </div>
 </div>
 
-<div class="skill-builder" id="skills">
-  <div class="skill-builder-inner">
-    <div class="section-tag">MODULE CONFIGURATION</div>
-    <div class="section-title">BUILD YOUR AGENT</div>
-    <p style="color:var(--muted);font-size:.85rem;margin-bottom:36px;max-width:600px">Select the skill modules to install on your unit. Each module unlocks deep automation — real actions taken on your behalf, 24/7.</p>
+<!-- WHAT YOU GET -->
+<div class="what" id="what">
+  <div class="what-inner">
+    <div class="stag">UNIT CONFIGURATION</div>
+    <div class="stitle">TWO LAYERS. ONE ROBOT.</div>
+    <div class="tiers-compare">
+      <div class="tier base">
+        <div class="tier-label">LAYER 01 // ALWAYS INCLUDED</div>
+        <div class="tier-name">BASE UNIT</div>
+        <div class="tier-price">€2</div>
+        <div class="tier-period">/ MONTH &nbsp;·&nbsp; Pre-configured AI agent</div>
+        <ul class="feature-list">
+          <li><span class="fi">▸</span><span>Your own Telegram bot — just click and chat</span></li>
+          <li><span class="fi">▸</span><span>Personal memory — knows your name, preferences, context</span></li>
+          <li><span class="fi">▸</span><span>Smart reminders and task tracking</span></li>
+          <li><span class="fi">▸</span><span>Morning brief — weather, events, news digest at 8AM</span></li>
+          <li><span class="fi">▸</span><span>24/7 uptime on our infrastructure</span></li>
+          <li><span class="fi">▸</span><span>Zero setup. We handle everything.</span></li>
+        </ul>
+        <div class="tier-note">
+          This is a fully pre-configured AI assistant running on your own private server.<br>
+          <span style="color:var(--green)">No OpenAI account needed. No terminal. No configuration.</span><br>
+          You get a Telegram bot link — that's it.
+        </div>
+      </div>
+      <div class="tier premium">
+        <div class="tier-label">LAYER 02 // REAL-WORLD ACTIONS</div>
+        <div class="tier-name">SKILL MODULES</div>
+        <div class="tier-price">+ €4–6</div>
+        <div class="tier-period">/ MONTH each &nbsp;·&nbsp; Our custom integrations</div>
+        <ul class="feature-list">
+          <li><span class="fi">◆</span><span>🍕 Food &amp; Dining — orders food, books restaurants</span></li>
+          <li><span class="fi">◆</span><span>✈️ Travel Intel — flight monitoring, hotel booking</span></li>
+          <li><span class="fi">◆</span><span>📡 Surveillance — price tracking, competitor monitoring</span></li>
+          <li><span class="fi">◆</span><span>🏠 Housing Ops — apartment hunting for nomads</span></li>
+        </ul>
+        <div class="tier-note">
+          Skill modules connect your agent to real services (Glovo, Uber Eats, Aviasales).<br>
+          <span style="color:var(--amber)">These are our backend integrations — your agent goes from answering to acting.</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SKILL BUILDER -->
+<div class="sb" id="skills">
+  <div class="sb-inner">
+    <div class="stag">MODULE CONFIGURATION</div>
+    <div class="stitle">BUILD YOUR UNIT</div>
+
+    <p style="color:var(--muted);font-size:.8rem;letter-spacing:2px;margin-bottom:8px">BASE UNIT — ALWAYS INCLUDED</p>
+    <div class="base-skills" style="margin-bottom:32px">
+      <div class="bsc">
+        <div class="bsc-icon">💬</div>
+        <div class="included-badge">✓ INCLUDED FREE</div>
+        <div class="bsc-name">SMART CHAT</div>
+        <div class="bsc-desc">Answers questions, helps think, remembers context</div>
+      </div>
+      <div class="bsc">
+        <div class="bsc-icon">🧠</div>
+        <div class="included-badge">✓ INCLUDED FREE</div>
+        <div class="bsc-name">MEMORY</div>
+        <div class="bsc-desc">Knows your name, preferences, saves what matters</div>
+      </div>
+      <div class="bsc">
+        <div class="bsc-icon">⏰</div>
+        <div class="included-badge">✓ INCLUDED FREE</div>
+        <div class="bsc-name">REMINDERS</div>
+        <div class="bsc-desc">Set tasks and deadlines via chat, get alerted on time</div>
+      </div>
+      <div class="bsc">
+        <div class="bsc-icon">📰</div>
+        <div class="included-badge">✓ INCLUDED FREE</div>
+        <div class="bsc-name">MORNING BRIEF</div>
+        <div class="bsc-desc">Daily digest: weather, news, calendar — every morning</div>
+      </div>
+    </div>
+
+    <p style="color:var(--amber);font-size:.8rem;letter-spacing:2px;margin-bottom:16px">◆ PREMIUM SKILL MODULES — ADD TO YOUR UNIT</p>
     <div class="skills-grid">
-      <div class="skill-card" data-price="6" onclick="toggleSkill(this)">
-        <div class="skill-header"><div class="skill-icon">🍕</div><button class="skill-toggle"></button></div>
-        <div class="skill-rank">RANK-A MODULE</div>
-        <div class="skill-name">FOOD &amp; DINING</div>
-        <div class="skill-desc">Orders food by voice or schedule. Remembers your diet, allergies, favourite spots. Books restaurant tables. Tracks calories from photos.</div>
-        <div class="skill-price">+ €6 / MONTH</div>
+      <div class="sc" data-price="6" onclick="toggleSkill(this)">
+        <div class="sc-header"><div class="sc-icon">🍕</div><button class="sc-toggle"></button></div>
+        <div class="sc-tag">REAL-WORLD ACTION MODULE</div>
+        <div class="sc-name">FOOD &amp; DINING</div>
+        <div class="sc-desc">Orders food by voice or schedule. Books restaurant tables. Tracks your diet from photos. Remembers your allergies and favourites.</div>
+        <div class="sc-powered">⚡ Powered by Glovo · Uber Eats · MealMe</div>
+        <div class="sc-price">+ €6 / MONTH</div>
       </div>
-      <div class="skill-card" data-price="6" onclick="toggleSkill(this)">
-        <div class="skill-header"><div class="skill-icon">✈️</div><button class="skill-toggle"></button></div>
-        <div class="skill-rank">RANK-A MODULE</div>
-        <div class="skill-name">TRAVEL INTEL</div>
-        <div class="skill-desc">Monitors flight prices, alerts on drops. Books hotels by criteria. Plans your trip itinerary. Tracks flight status, reminds to check in.</div>
-        <div class="skill-price">+ €6 / MONTH</div>
+      <div class="sc" data-price="6" onclick="toggleSkill(this)">
+        <div class="sc-header"><div class="sc-icon">✈️</div><button class="sc-toggle"></button></div>
+        <div class="sc-tag">REAL-WORLD ACTION MODULE</div>
+        <div class="sc-name">TRAVEL INTEL</div>
+        <div class="sc-desc">Monitors flight prices, alerts on drops. Books hotels by criteria. Plans trip itineraries. Tracks flight status, reminds to check in.</div>
+        <div class="sc-powered">⚡ Powered by Aviasales · Booking.com</div>
+        <div class="sc-price">+ €6 / MONTH</div>
       </div>
-      <div class="skill-card" data-price="5" onclick="toggleSkill(this)">
-        <div class="skill-header"><div class="skill-icon">📡</div><button class="skill-toggle"></button></div>
-        <div class="skill-rank">RANK-B MODULE</div>
-        <div class="skill-name">SURVEILLANCE</div>
-        <div class="skill-desc">Monitors product prices, competitor sites, real estate listings. Keyword alerts in news. Instant notification when something changes.</div>
-        <div class="skill-price">+ €5 / MONTH</div>
+      <div class="sc" data-price="5" onclick="toggleSkill(this)">
+        <div class="sc-header"><div class="sc-icon">📡</div><button class="sc-toggle"></button></div>
+        <div class="sc-tag">REAL-WORLD ACTION MODULE</div>
+        <div class="sc-name">SURVEILLANCE</div>
+        <div class="sc-desc">Monitors product prices on Amazon and local shops. Tracks competitor websites. Keyword news alerts. Apartment listing watcher.</div>
+        <div class="sc-powered">⚡ Powered by custom scrapers</div>
+        <div class="sc-price">+ €5 / MONTH</div>
       </div>
-      <div class="skill-card" data-price="4" onclick="toggleSkill(this)">
-        <div class="skill-header"><div class="skill-icon">📰</div><button class="skill-toggle"></button></div>
-        <div class="skill-rank">RANK-B MODULE</div>
-        <div class="skill-name">MORNING BRIEF</div>
-        <div class="skill-desc">Daily intel report at your chosen time. Weather, calendar, important emails, top news filtered to your interests. Zero noise.</div>
-        <div class="skill-price">+ €4 / MONTH</div>
-      </div>
-      <div class="skill-card" data-price="5" onclick="toggleSkill(this)">
-        <div class="skill-header"><div class="skill-icon">🏠</div><button class="skill-toggle"></button></div>
-        <div class="skill-rank">RANK-B MODULE</div>
-        <div class="skill-name">HOUSING OPS</div>
-        <div class="skill-desc">Finds apartments on Airbnb, Booking, local platforms. Monitors new listings, alerts instantly. Compares by price, area, reviews.</div>
-        <div class="skill-price">+ €5 / MONTH</div>
+      <div class="sc" data-price="5" onclick="toggleSkill(this)">
+        <div class="sc-header"><div class="sc-icon">🏠</div><button class="sc-toggle"></button></div>
+        <div class="sc-tag">REAL-WORLD ACTION MODULE</div>
+        <div class="sc-name">HOUSING OPS</div>
+        <div class="sc-desc">Finds rentals on Airbnb, Booking, local platforms. Monitors new listings, instant alerts. Compares by price, area, reviews. For digital nomads.</div>
+        <div class="sc-powered">⚡ Powered by Airbnb · Booking · Idealista</div>
+        <div class="sc-price">+ €5 / MONTH</div>
       </div>
     </div>
     <div class="cost-display">
       <div>
-        <div class="cost-label">YOUR UNIT TOTAL COST</div>
-        <div class="cost-val" id="totalCost">€9 / mo</div>
-        <div class="cost-breakdown" id="costBreakdown">Base unit: €9 &nbsp;|&nbsp; Skills: €0</div>
+        <div class="cost-label">YOUR UNIT TOTAL</div>
+        <div class="cost-val" id="totalCost">€2 / mo</div>
+        <div class="cost-breakdown" id="costBreakdown">Base unit: €2 &nbsp;|&nbsp; Skill modules: €0</div>
       </div>
-      <a href="#pricing" class="cost-cta">&gt; CONFIGURE &amp; DEPLOY</a>
+      <a href="#pricing" class="cost-cta">◆ DEPLOY THIS CONFIGURATION</a>
     </div>
   </div>
 </div>
 
-<div class="section-wrapper">
+<!-- HOW IT WORKS -->
+<div class="swrap">
 <section id="how">
-  <div class="section-tag">OPERATIONAL SEQUENCE</div>
-  <div class="section-title">HOW IT WORKS</div>
+  <div class="stag">OPERATIONAL SEQUENCE</div>
+  <div class="stitle">HOW IT WORKS</div>
   <div class="steps">
-    <div class="step"><div class="step-num">01</div><div class="step-code">INIT SEQUENCE</div><div class="step-title">ACQUIRE UNIT</div><div class="step-desc">Choose your plan and skill modules. Your personal agent is deployed on a dedicated server in minutes. No setup required on your end.</div></div>
-    <div class="step"><div class="step-num">02</div><div class="step-code">CALIBRATION</div><div class="step-title">UNIT LEARNS YOU</div><div class="step-desc">Tell your agent your preferences, allergies, addresses, routines. It remembers everything and gets smarter with every interaction.</div></div>
-    <div class="step"><div class="step-num">03</div><div class="step-code">DEPLOYMENT COMPLETE</div><div class="step-title">UNIT OPERATES</div><div class="step-desc">Your agent works 24/7. Orders food, books tables, monitors prices, briefs you every morning — without you lifting a finger.</div></div>
+    <div class="step"><div class="step-num">01</div><div class="step-code">ACQUISITION</div><div class="step-title">CHOOSE YOUR UNIT</div><div class="step-desc">Pick a plan and select skill modules. No technical knowledge needed — we handle everything from server setup to configuration.</div></div>
+    <div class="step"><div class="step-num">02</div><div class="step-code">DEPLOYMENT</div><div class="step-title">GET YOUR BOT LINK</div><div class="step-desc">In minutes, you receive a Telegram link. Your personal AI unit is online, configured, and ready. Just start chatting.</div></div>
+    <div class="step"><div class="step-num">03</div><div class="step-code">OPERATION</div><div class="step-title">UNIT WORKS FOR YOU</div><div class="step-desc">Your agent learns your preferences and operates 24/7. It takes action — not just answers — using your activated skill modules.</div></div>
   </div>
 </section>
 </div>
 
-<div class="section-wrapper">
-<section>
-  <div class="section-tag">UNIT SPECIFICATIONS</div>
-  <div class="section-title">WHY THIS UNIT</div>
-  <div class="why-grid">
-    <div class="why-card"><div class="why-icon">🔒</div><div class="why-title">ZERO DATA LEAKS</div><div class="why-desc">Your data lives on your server, not Meta's or Google's. We don't train on your conversations. Full privacy by architecture.</div></div>
-    <div class="why-card"><div class="why-icon">⚡</div><div class="why-title">ALWAYS OPERATIONAL</div><div class="why-desc">Unlike ChatGPT that waits for you to ask — UNIT-7 operates 24/7. Scheduled tasks run while you sleep.</div></div>
-    <div class="why-card"><div class="why-icon">🧠</div><div class="why-title">LEARNS YOUR PATTERNS</div><div class="why-desc">Over time your agent understands your preferences, routines and tastes. It proactively suggests — not just responds.</div></div>
-    <div class="why-card"><div class="why-icon">🎯</div><div class="why-title">TAKES REAL ACTION</div><div class="why-desc">Other AIs answer. UNIT-7 acts. It places orders, books reservations, sets monitors. Real outcomes, not just information.</div></div>
-  </div>
-</section>
-</div>
-
-<div class="section-wrapper">
+<!-- PRICING -->
+<div class="swrap">
 <section id="pricing">
-  <div class="section-tag">ACQUISITION TIERS</div>
-  <div class="section-title">SELECT YOUR UNIT</div>
-  <div class="pricing-grid">
-    <div class="plan">
-      <div class="plan-name">RECRUIT</div>
-      <div class="plan-price">€9</div>
-      <div class="plan-period">/ MONTH &nbsp;|&nbsp; 7-DAY FREE TRIAL</div>
-      <ul class="plan-features"><li>1 Personal AI Agent</li><li>Chat interface + Telegram</li><li>Basic reminders &amp; memory</li><li>Add skill modules à la carte</li><li>Standard support</li></ul>
-      <a href="#" class="plan-btn">&gt; DEPLOY RECRUIT</a>
+  <div class="stag">ACQUISITION TIERS</div>
+  <div class="stitle">SELECT YOUR CONFIGURATION</div>
+  <div class="pgrid">
+    <div class="plan p0">
+      <div class="plan-name">BASE UNIT</div>
+      <div class="plan-price">€2</div>
+      <div class="plan-period">/ MONTH &nbsp;·&nbsp; 7-DAY FREE TRIAL</div>
+      <div class="plan-inc">INCLUDED:</div>
+      <ul class="pfl">
+        <li class="g">Smart chat + personal memory</li>
+        <li class="g">Reminders &amp; task tracking</li>
+        <li class="g">Morning brief (daily digest)</li>
+        <li class="g">Your own Telegram bot</li>
+        <li class="g">24/7 uptime on our infrastructure</li>
+      </ul>
+      <div class="plan-inc">ADD SKILL MODULES:</div>
+      <ul class="pfl" style="margin-bottom:28px">
+        <li class="a">Food &amp; Dining + €6/mo</li>
+        <li class="a">Travel Intel + €6/mo</li>
+        <li class="a">Surveillance + €5/mo</li>
+        <li class="a">Housing Ops + €5/mo</li>
+      </ul>
+      <a href="#" class="pbtn">&gt; DEPLOY BASE UNIT</a>
     </div>
-    <div class="plan featured">
-      <div class="plan-badge">◆ MOST POPULAR ◆</div>
+    <div class="plan feat p1">
+      <div class="plan-badge">◆ BEST VALUE ◆</div>
       <div class="plan-name">OPERATIVE</div>
       <div class="plan-price">€24</div>
-      <div class="plan-period">/ MONTH &nbsp;|&nbsp; 7-DAY FREE TRIAL</div>
-      <ul class="plan-features"><li>1 Personal AI Agent</li><li>ALL 5 skill modules included</li><li>Chat interface + Telegram</li><li>Priority support</li><li>Custom cron schedules</li></ul>
-      <a href="#" class="plan-btn">&gt; DEPLOY OPERATIVE</a>
+      <div class="plan-period">/ MONTH &nbsp;·&nbsp; 7-DAY FREE TRIAL</div>
+      <div class="plan-inc">EVERYTHING IN BASE, PLUS:</div>
+      <ul class="pfl">
+        <li class="a">ALL 4 skill modules included</li>
+        <li class="a">Food ordering via Glovo / Uber Eats</li>
+        <li class="a">Flight &amp; hotel monitoring</li>
+        <li class="a">Price &amp; news surveillance</li>
+        <li class="a">Apartment hunting for nomads</li>
+        <li class="a">Priority support</li>
+      </ul>
+      <a href="#" class="pbtn">&gt; DEPLOY OPERATIVE</a>
     </div>
-    <div class="plan">
+    <div class="plan p2">
       <div class="plan-name">COMMANDER</div>
       <div class="plan-price">€49</div>
-      <div class="plan-period">/ MONTH &nbsp;|&nbsp; 7-DAY FREE TRIAL</div>
-      <ul class="plan-features"><li>Up to 3 AI Agents</li><li>ALL skill modules on all units</li><li>API access for integrations</li><li>SLA 99.9% uptime</li><li>Dedicated support channel</li></ul>
-      <a href="#" class="plan-btn">&gt; DEPLOY COMMANDER</a>
+      <div class="plan-period">/ MONTH &nbsp;·&nbsp; 7-DAY FREE TRIAL</div>
+      <div class="plan-inc">EVERYTHING IN OPERATIVE, PLUS:</div>
+      <ul class="pfl">
+        <li class="g">Up to 3 AI units</li>
+        <li class="g">API access for custom integrations</li>
+        <li class="g">SLA 99.9% uptime</li>
+        <li class="g">Dedicated support channel</li>
+        <li class="g">Early access to new skill modules</li>
+      </ul>
+      <a href="#" class="pbtn" style="border-color:var(--text);color:var(--text)">&gt; DEPLOY COMMANDER</a>
     </div>
   </div>
 </section>
@@ -258,7 +395,7 @@ footer a:hover{color:var(--green)}
   var c=document.getElementById('matrix'),ctx=c.getContext('2d');
   function r(){c.width=c.parentElement.offsetWidth;c.height=c.parentElement.offsetHeight}
   r();window.addEventListener('resize',r);
-  var chars='アイウエオカキUNIT7AGENT01DEPLOY'.split(''),fs=12,cols,drops=[];
+  var chars='アイウエオUNIT7AGENT01DEPLOY'.split(''),fs=12,cols,drops=[];
   function init(){cols=Math.floor(c.width/fs);drops=Array(cols).fill(1)}
   init();window.addEventListener('resize',init);
   setInterval(function(){
@@ -271,14 +408,14 @@ footer a:hover{color:var(--green)}
     });
   },50);
 })();
-var BASE=9;
+var BASE=2;
 function toggleSkill(card){card.classList.toggle('active');updateCost()}
 function updateCost(){
-  var active=[].slice.call(document.querySelectorAll('.skill-card.active'));
+  var active=[].slice.call(document.querySelectorAll('.sc.active'));
   var st=active.reduce(function(s,c){return s+parseInt(c.dataset.price)},0);
   var t=BASE+st;
   document.getElementById('totalCost').textContent='€'+t+' / mo';
-  document.getElementById('costBreakdown').textContent='Base unit: €'+BASE+'\u00a0|\u00a0Skills: €'+st+(active.length?' ('+active.length+' module'+(active.length>1?'s':'')+')':\u0027\u0027);
+  document.getElementById('costBreakdown').textContent='Base unit: €'+BASE+'\u00a0|\u00a0Skill modules: €'+st+(active.length?' ('+active.length+' active)':'');
 }
 </script>
 </body>
